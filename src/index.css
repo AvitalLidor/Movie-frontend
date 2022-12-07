@@ -1,0 +1,24 @@
+.spin-button-none::-webkit-outer-spin-button,
+.spin-button-none::-webkit-inner-spin-button {
+    appearance: none;
+}
+
+.bounce-custom {
+    animation: bounce-custom 2s ease;
+}
+
+@keyframes bounce-custom {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%) rotate(-120deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0px) rotate(0deg);
+    }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

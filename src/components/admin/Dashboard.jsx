@@ -1,61 +1,71 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { AiOutlineHome } from "react-icons/ai";
-import { BiMoviePlay } from "react-icons/bi";
-import { FaUserSecret } from "react-icons/fa";
-import { CgLogOut } from "react-icons/cg";
+import React, { useRef, useEffect, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 
 export default function Dashboard() {
-  return (
-    <nav className="w-48 min-h-screen bg-secondary border-r border-gray-300 flex flex-col justify-between">
-      <ul className="pl-5">
-        <li className="mb-8">
-          <Link to="/">
-            <img src="./logo.png" alt="logo" className="h-14 p-2" />
-          </Link>
-        </li>
+  const [showOptions, setShowOptions] = useState(false);
 
-        <li>
-          <NavItem to="/">
-            <AiOutlineHome />
-            <span>Home</span>
-          </NavItem>
-        </li>
-        <li>
-          <NavItem to="/movies">
-            <BiMoviePlay />
-            <span>Movies</span>
-          </NavItem>
-        </li>
-        <li>
-          <NavItem to="/actors">
-            <FaUserSecret />
-            <span>Actors</span>
-          </NavItem>
-        </li>
-      </ul>
-      <div className="flex flex-col justify-between items-start p-5">
-        <span className="font-semibold text-white text-xl">Admin</span>
-        <button className="flex items-center text-dark-subtle text-sm hover:text-white transition space-x-1">
-          <CgLogOut />
-          <span>Log out</span>
-        </button>
-      </div>
-    </nav>
+  return (
+    <div className="flex items-center justify-between relative">
+      <input
+        type="text"
+        className="border-2 dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary dark:text-white transition bg-transparent rounded text-lg p-1 outline-none"
+        placeholder="Search Movies..."
+      />
+      <button
+        onClick={() => setShowOptions(true)}
+        className="flex items-center space-x-2 border-secondary hover:border-primary text-secondary hover:opacity-80 transition font-semibold border-2 rounded text-lg px-3 py-1"
+      >
+        <span>Create</span>
+        <AiOutlinePlus />
+      </button>
+
+      <CreateOptions
+        visible={showOptions}
+        onClose={() => setShowOptions(false)}
+      />
+    </div>
   );
 }
 
-const NavItem = ({ children, to }) => {
-  const commonClasses =
-    " flex items-center text-lg space-x-2 p-2 hover:opacity-80";
-  return (
-    <NavLink
-      className={({ isActive }) =>
-        (isActive ? "text-white" : "text-gray-400") + commonClasses
+const CreateOptions = ({ visible, onClose }) => {
+  const container = useRef();
+
+  useEffect(() => {
+    const handleClose = (e) => {
+      if (!visible) return;
+
+      if (container.current) {
+        if (!container.current.classList.contains("animate-scale"))
+          container.current.classList.add("animate-scale-reverse");
       }
-      to={to}
+    };
+
+    document.addEventListener("click", handleClose);
+    return () => {
+      document.removeEventListener("click", handleClose);
+    };
+  }, [visible]);
+
+  if (!visible) return null;
+
+  return (
+    <div
+      ref={container}
+      className="absolute right-0 top-12 flex flex-col space-y-3 p-5 dark:bg-secondary bg-white drop-shadow-lg rounded animate-scale"
+    >
+      <Option>Add Movie</Option>
+      <Option>Add Actor</Option>
+    </div>
+  );
+};
+
+const Option = ({ children, onClick }) => {
+  return (
+    <button
+      onClick={onClick}
+      className="dark:text-white text-secondary hover:opacity-80 transition"
     >
       {children}
-    </NavLink>
+    </button>
   );
 };

@@ -18,7 +18,6 @@ export default function App() {
 
   if (isAdmin) return <AdminNavigator />;
 
-  console.log(isAdmin);
   return (
     <>
       <Navbar />

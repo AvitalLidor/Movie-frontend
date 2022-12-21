@@ -11,10 +11,19 @@ export default function MovieUpload() {
   const [videoUploaded, setVideoUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
-
   const [movieInfo, setMovieInfo] = useState({
     title: "",
+    storyLine: "",
+    tags: [],
     cast: [],
+    director: {},
+    writers: [],
+    releseDate: "",
+    poster: null,
+    genres: [],
+    type: "",
+    language: "",
+    status: "",
     trailer: {
       url: "",
       public_id: "",

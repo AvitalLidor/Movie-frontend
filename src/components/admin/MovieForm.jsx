@@ -1,8 +1,7 @@
 import React from "react";
+import { commonInputClasses } from "../../utils/theme";
+import LiveSearch from "../LiveSearch";
 import TagsInput from "../TagsInput";
-
-const commonInputClasses =
-  "w-full bg-transparent outline-none dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary transition dark:text-white text-primary";
 
 export default function MovieForm() {
   const handleSubmit = (e) => {
@@ -31,6 +30,7 @@ export default function MovieForm() {
         </div>
 
         <TagsInput />
+        <LiveSearch />
       </div>
       <div className="w-[30%] h-5 bg-blue-400"></div>
     </form>

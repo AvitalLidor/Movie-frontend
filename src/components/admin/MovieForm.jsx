@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useNotification } from "../../hooks";
 import { commonInputClasses } from "../../utils/theme";
+import CastForm from "../form/CastForm";
 import Submit from "../form/Submit";
 import LiveSearch from "../LiveSearch";
 import ModalContainer from "../modals/ModalContainer";
@@ -47,6 +48,19 @@ export const results = [
   },
 ];
 
+export const renderItem = (result) => {
+  return (
+    <div key={result.id} className="flex space-x-2 rounded overflow-hidden">
+      <img
+        src={result.avatar}
+        alt={result.name}
+        className="w-16 h-16 object-cover"
+      />
+      <p className="dark:text-white font-semibold">{result.name}</p>
+    </div>
+  );
+};
+
 const defaultMovieInfo = {
   title: "",
   storyLine: "",
@@ -73,19 +87,6 @@ export default function MovieForm() {
     console.log(movieInfo);
   };
 
-  const renderItem = (result) => {
-    return (
-      <div key={result.key} className="flex space-x-2 rounded overflow-hidden">
-        <img
-          src={result.avatar}
-          alt={result.name}
-          className="w-16 h-16 object-cover"
-        />
-        <p className="dark:text-white font-semibold">{result.name}</p>
-      </div>
-    );
-  };
-
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setMovieInfo({ ...movieInfo, [name]: value });
@@ -97,6 +98,11 @@ export default function MovieForm() {
 
   const updateDirector = (profile) => {
     setMovieInfo({ ...movieInfo, director: profile });
+  };
+
+  const updateCast = (castInfo) => {
+    const { cast } = movieInfo;
+    setMovieInfo({ ...movieInfo, cast: [...cast, castInfo] });
   };
 
   const updateWriters = (profile) => {
@@ -195,6 +201,11 @@ export default function MovieForm() {
               onSelect={updateWriters}
             />
           </div>
+          <div>
+            <LabelWithBadge>Add Cast & Crew</LabelWithBadge>
+            <CastForm onSubmit={updateCast} />
+          </div>
+
           <Submit value="Upload" />
         </div>
         <div className="w-[30%] h-5 bg-blue-400"></div>

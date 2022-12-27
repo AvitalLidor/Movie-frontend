@@ -1,10 +1,7 @@
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-export default function TagsInput({ name, onChange }) {
+export default function TagsInput({ name, value, onChange }) {
   const [tag, setTag] = useState("");
   const [tags, setTags] = useState([]);
 
@@ -46,6 +43,7 @@ export default function TagsInput({ name, onChange }) {
     );
     tagsInput.current.classList.add("dark:border-white", "border-primary");
   };
+
   const handleOnBlur = () => {
     tagsInput.current.classList.add(
       "dark:border-dark-subtle",
@@ -54,8 +52,12 @@ export default function TagsInput({ name, onChange }) {
     tagsInput.current.classList.remove("dark:border-white", "border-primary");
   };
 
+  // useEffect(() => {
+  //   if (value.length) setTags(value);
+  // }, [value]);
+
   useEffect(() => {
-    input.current.scrollIntoView({});
+    input.current?.scrollIntoView();
   }, [tag]);
 
   return (
@@ -73,8 +75,9 @@ export default function TagsInput({ name, onChange }) {
         <input
           ref={input}
           type="text"
+          id={name}
           className="h-full flex-grow bg-transparent outline-none dark:text-white"
-          placeholder="Tag one , Tag two"
+          placeholder="Tag one, Tag two"
           value={tag}
           onChange={handleOnChange}
           onFocus={handleOnFocus}

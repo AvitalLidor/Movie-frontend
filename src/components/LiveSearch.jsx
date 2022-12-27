@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, forwardRef } from "react";
 import { commonInputClasses } from "../utils/theme";
 
 export default function LiveSearch({
@@ -6,8 +6,8 @@ export default function LiveSearch({
   placeholder = "",
   results = [],
   name,
-  selectedResultStyle,
   resultContainerStyle,
+  selectedResultStyle,
   inputStyle,
   renderItem = null,
   onChange = null,
@@ -30,7 +30,10 @@ export default function LiveSearch({
   };
 
   const handleSelection = (selectedItem) => {
-    onSelect(selectedItem);
+    if (selectedItem) {
+      onSelect(selectedItem);
+      closeSearch();
+    }
   };
 
   const handleKeyDown = ({ key }) => {
@@ -45,6 +48,7 @@ export default function LiveSearch({
     if (key === "ArrowUp") {
       nextCount = (focusedIndex + results.length - 1) % results.length;
     }
+    if (key === "Escape") return closeSearch();
 
     if (key === "Enter") return handleSelection(results[focusedIndex]);
 
@@ -54,7 +58,7 @@ export default function LiveSearch({
   const getInputStyle = () => {
     return inputStyle
       ? inputStyle
-      : commonInputClasses + " border-2 rounded p-1 text-lg ";
+      : commonInputClasses + " border-2 rounded p-1 text-lg";
   };
 
   return (
@@ -73,6 +77,8 @@ export default function LiveSearch({
         onFocus={handleOnFocus}
         value={value}
         onChange={onChange}
+        // onBlur={handleOnBlur}
+        // onKeyDown={handleKeyDown}
       />
       <SearchResults
         results={results}

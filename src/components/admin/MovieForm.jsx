@@ -5,8 +5,10 @@ import { commonInputClasses } from "../../utils/theme";
 import CastForm from "../form/CastForm";
 import Submit from "../form/Submit";
 import LiveSearch from "../LiveSearch";
-import ModalContainer from "../modals/ModalContainer";
-import WritersModal from "../modals/WritersModal";
+import CastModal from "../models/CastModal";
+// import ModalContainer from "../modals/ModalContainer";
+import WritersModal from "../models/WritersModal";
+import PosterSelector from "../PosterSelector";
 import TagsInput from "../TagsInput";
 
 export const results = [
@@ -78,7 +80,8 @@ const defaultMovieInfo = {
 
 export default function MovieForm() {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
-  const [showWritersModal, setshowWritersModal] = useState(false);
+  const [showWritersModal, setShowWritersModal] = useState(false);
+  const [showCastModal, setShowCastModal] = useState(false);
 
   const { updateNotification } = useNotification();
 
@@ -119,10 +122,17 @@ export default function MovieForm() {
   };
 
   const hideWritersModal = () => {
-    setshowWritersModal(false);
+    setShowWritersModal(false);
   };
   const displayWritersModal = () => {
-    setshowWritersModal(true);
+    setShowWritersModal(true);
+  };
+
+  const hideCastModal = () => {
+    setShowCastModal(false);
+  };
+  const displayCastModal = () => {
+    setShowCastModal(true);
   };
 
   const handleWriterRemove = (profileId) => {
@@ -132,10 +142,17 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, writers: [...newWriters] });
   };
 
-  const { title, storyLine, director, writers } = movieInfo;
+  const handleCastRemove = (profileId) => {
+    const { cast } = movieInfo;
+    const newCast = cast.filter(({ profile }) => profile.id !== profileId);
+    if (!newCast.length) hideCastModal();
+    setMovieInfo({ ...movieInfo, cast: [...newCast] });
+  };
+
+  const { title, storyLine, director, writers, cast, tags } = movieInfo;
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex space-x-3">
+      <div onSubmit={handleSubmit} className="flex space-x-3">
         <div className="w-[70%] h-5 space-y-5">
           <div>
             <Label htmlFor="title">Title</Label>
@@ -166,18 +183,18 @@ export default function MovieForm() {
 
           <div>
             <Label htmlFor="tags">Tags</Label>
-            <TagsInput name="tags" onChange={updateTags} />
+            <TagsInput value={tags} name="tags" onChange={updateTags} />
           </div>
 
           <div>
             <Label htmlFor="director">Director</Label>
             <LiveSearch
               name="director"
-              value={director.name}
-              placeholder="Search profile"
               results={results}
+              placeholder="Search profile"
               renderItem={renderItem}
               onSelect={updateDirector}
+              value={director.name}
             />
           </div>
 
@@ -186,12 +203,12 @@ export default function MovieForm() {
               <LabelWithBadge badge={writers.length} htmlFor="writers">
                 Writers
               </LabelWithBadge>
-              <button
+              <ViewAllBtn
                 onClick={displayWritersModal}
-                className="dark:text-white text-primary hover:underline transition"
+                visible={writers.length}
               >
                 View All
-              </button>
+              </ViewAllBtn>
             </div>
             <LiveSearch
               name="writers"
@@ -202,19 +219,44 @@ export default function MovieForm() {
             />
           </div>
           <div>
-            <LabelWithBadge>Add Cast & Crew</LabelWithBadge>
+            <div className="flex justify-between">
+              <LabelWithBadge badge={cast.length}>
+                Add Cast & Crew
+              </LabelWithBadge>
+              <ViewAllBtn onClick={displayCastModal} visible={cast.length}>
+                View All
+              </ViewAllBtn>
+            </div>
+
             <CastForm onSubmit={updateCast} />
           </div>
 
-          <Submit value="Upload" />
+          <input
+            type="date"
+            className={commonInputClasses + " border-2 rounded p-1 w-auto"}
+            onChange={handleChange}
+            name="releaseDate"
+          />
+
+          <Submit value="Upload" onClick={handleSubmit} type="button" />
         </div>
-        <div className="w-[30%] h-5 bg-blue-400"></div>
-      </form>
+        <div className="w-[30%]">
+          <PosterSelector />
+        </div>
+      </div>
+
       <WritersModal
         onClose={hideWritersModal}
         profiles={writers}
         visible={showWritersModal}
         onRemoveClick={handleWriterRemove}
+      />
+
+      <CastModal
+        onClose={hideCastModal}
+        casts={cast}
+        visible={showCastModal}
+        onRemoveClick={handleCastRemove}
       />
     </>
   );
@@ -245,5 +287,18 @@ const LabelWithBadge = ({ children, htmlFor, badge = 0 }) => {
       <Label htmlFor={htmlFor}>{children}</Label>
       {renderBadge()}
     </div>
+  );
+};
+
+const ViewAllBtn = ({ visible, children, onClick }) => {
+  if (!visible) return null;
+  return (
+    <button
+      onClick={onClick}
+      type="button"
+      className="dark:text-white text-primary hover:underline transition"
+    >
+      {children}
+    </button>
   );
 };

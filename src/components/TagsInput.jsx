@@ -52,9 +52,9 @@ export default function TagsInput({ name, value, onChange }) {
     tagsInput.current.classList.remove("dark:border-white", "border-primary");
   };
 
-  // useEffect(() => {
-  //   if (value.length) setTags(value);
-  // }, [value]);
+  useEffect(() => {
+    if (value?.length) setTags(value);
+  }, [value]);
 
   useEffect(() => {
     input.current?.scrollIntoView();

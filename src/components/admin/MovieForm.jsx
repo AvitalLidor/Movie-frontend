@@ -1,6 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { useNotification } from "../../hooks";
+import {
+  languageOptions,
+  statusOptions,
+  typeOptions,
+} from "../../utils/options";
 import { commonInputClasses } from "../../utils/theme";
 import CastForm from "../form/CastForm";
 import Submit from "../form/Submit";
@@ -11,6 +16,7 @@ import GenresModal from "../models/GenresModal";
 // import ModalContainer from "../modals/ModalContainer";
 import WritersModal from "../models/WritersModal";
 import PosterSelector from "../PosterSelector";
+import Selector from "../Selector";
 import TagsInput from "../TagsInput";
 
 export const results = [
@@ -176,11 +182,22 @@ export default function MovieForm() {
     setMovieInfo({ ...movieInfo, cast: [...newCast] });
   };
 
-  const { title, storyLine, director, writers, cast, tags } = movieInfo;
+  const {
+    title,
+    storyLine,
+    director,
+    writers,
+    cast,
+    tags,
+    genres,
+    type,
+    language,
+    status,
+  } = movieInfo;
   return (
     <>
       <div onSubmit={handleSubmit} className="flex space-x-3">
-        <div className="w-[70%] h-5 space-y-5">
+        <div className="w-[70%] space-y-5">
           <div>
             <Label htmlFor="title">Title</Label>
             <input
@@ -274,7 +291,29 @@ export default function MovieForm() {
             selectedPoster={selectedPosterForUI}
             accept="image/jpg , image/jpeg , image/png"
           />
-          <GenresSelector onClick={displayGenresModal} />
+          <GenresSelector badge={genres.length} onClick={displayGenresModal} />
+
+          <Selector
+            onChange={handleChange}
+            name="type"
+            value={type}
+            options={typeOptions}
+            label="Type"
+          />
+          <Selector
+            onChange={handleChange}
+            name="language"
+            value={language}
+            options={languageOptions}
+            label="Language"
+          />
+          <Selector
+            onChange={handleChange}
+            name="status"
+            value={status}
+            options={statusOptions}
+            label="Status"
+          />
         </div>
       </div>
 
@@ -295,6 +334,7 @@ export default function MovieForm() {
         onSubmit={updateGenres}
         visible={showGenresModal}
         onClose={hideGenresModal}
+        previousSelection={genres}
       />
     </>
   );

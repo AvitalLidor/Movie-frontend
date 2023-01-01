@@ -49,7 +49,7 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
 
 const CreateOptions = ({ options, visible, onClose }) => {
   const container = useRef();
-  const containerID = "option-container";
+  const containerID = "options-container";
 
   useEffect(() => {
     const handleClose = (e) => {
@@ -70,6 +70,11 @@ const CreateOptions = ({ options, visible, onClose }) => {
     };
   }, [visible]);
 
+  const handleClick = (fn) => {
+    fn();
+    onClose();
+  };
+
   const handleAnimationEnd = (e) => {
     if (e.target.classList.contains("animate-scale-reverse")) onClose();
     e.target.classList.remove("animate-scale");
@@ -85,7 +90,7 @@ const CreateOptions = ({ options, visible, onClose }) => {
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
-        return <Option onClick={onClick}>{title}</Option>;
+        return <Option onClick={() => handleClick(onClick)}>{title}</Option>;
       })}
     </div>
   );

@@ -9,7 +9,7 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
 
   const options = [
     { title: "Add Movie", onClick: onAddMovieClick },
-    { title: "Add Actor", onclick: onAddActorClick },
+    { title: "Add Actor", onClick: onAddActorClick },
   ];
 
   return (
@@ -90,7 +90,11 @@ const CreateOptions = ({ options, visible, onClose }) => {
       onAnimationEnd={handleAnimationEnd}
     >
       {options.map(({ title, onClick }) => {
-        return <Option onClick={() => handleClick(onClick)}>{title}</Option>;
+        return (
+          <Option key={title} onClick={() => handleClick(onClick)}>
+            {title}
+          </Option>
+        );
       })}
     </div>
   );

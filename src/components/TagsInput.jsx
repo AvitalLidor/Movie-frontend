@@ -53,7 +53,7 @@ export default function TagsInput({ name, value, onChange }) {
   };
 
   useEffect(() => {
-    if (value?.length) setTags(value);
+    if (value.length) setTags(value);
   }, [value]);
 
   useEffect(() => {

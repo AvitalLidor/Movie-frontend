@@ -7,6 +7,7 @@ import {
   typeOptions,
 } from "../../utils/options";
 import { commonInputClasses } from "../../utils/theme";
+import { validateMovie } from "../../utils/validator";
 import DirectorSelector from "../DirectorSelector";
 import CastForm from "../form/CastForm";
 import Submit from "../form/Submit";
@@ -38,7 +39,7 @@ const defaultMovieInfo = {
   status: "",
 };
 
-export default function MovieForm() {
+export default function MovieForm({ onSubmit }) {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
@@ -49,7 +50,28 @@ export default function MovieForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(movieInfo);
+    const { error } = validateMovie(movieInfo);
+    if (error) return updateNotification("error", error);
+
+    // cast, tags , genres , writers , director
+    const { tags, genres, cast, writers, director } = movieInfo;
+    const formData = new FormData();
+    formData.append("tags", JSON.stringify(tags));
+    formData.append("genres", JSON.stringify(genres));
+
+    const finalCast = cast.map((c) => c.id);
+    formData.append("cast", JSON.stringify(finalCast));
+
+    if (writers.length) {
+      const finalWriters = writers.map((w) => w.id);
+      formData.append("cast", JSON.stringify(finalWriters));
+    }
+
+    if (director.id) {
+      formData.append("director", director.id);
+    }
+
+    onSubmit(movieInfo);
   };
 
   const updatePosterForUI = (file) => {

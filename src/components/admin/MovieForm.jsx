@@ -39,7 +39,7 @@ const defaultMovieInfo = {
   status: "",
 };
 
-export default function MovieForm({ onSubmit }) {
+export default function MovieForm({ onSubmit, busy }) {
   const [movieInfo, setMovieInfo] = useState({ ...defaultMovieInfo });
   const [showWritersModal, setShowWritersModal] = useState(false);
   const [showCastModal, setShowCastModal] = useState(false);
@@ -54,24 +54,43 @@ export default function MovieForm({ onSubmit }) {
     if (error) return updateNotification("error", error);
 
     // cast, tags , genres , writers , director
-    const { tags, genres, cast, writers, director } = movieInfo;
-    const formData = new FormData();
-    formData.append("tags", JSON.stringify(tags));
-    formData.append("genres", JSON.stringify(genres));
+    const { tags, genres, cast, writers, director, poster } = movieInfo;
 
-    const finalCast = cast.map((c) => c.id);
-    formData.append("cast", JSON.stringify(finalCast));
+    const formData = new FormData();
+
+    const finalMovieInfo = {
+      ...movieInfo,
+    };
+
+    finalMovieInfo.tags = JSON.stringify(tags);
+    finalMovieInfo.genres = JSON.stringify(genres);
+
+    //    {
+    //   actor: { type: mongoose.Schema.Types.ObjectId, ref: "Actor" },
+    //   roleAs: String,
+    //   leadActor: Boolean,
+    // },
+
+    const finalCast = cast.map((c) => ({
+      actor: c.profile.id,
+      roleAs: c.roleAs,
+      leadActor: c.leadActor,
+    }));
+    finalMovieInfo.cast = JSON.stringify(finalCast);
 
     if (writers.length) {
       const finalWriters = writers.map((w) => w.id);
-      formData.append("cast", JSON.stringify(finalWriters));
+      finalMovieInfo.writers = JSON.stringify(finalWriters);
     }
 
-    if (director.id) {
-      formData.append("director", director.id);
+    if (director.id) finalMovieInfo.director = director.id;
+    if (poster) finalMovieInfo.poster = poster;
+
+    for (let key in finalMovieInfo) {
+      formData.append(key, finalMovieInfo[key]);
     }
 
-    onSubmit(movieInfo);
+    onSubmit(formData);
   };
 
   const updatePosterForUI = (file) => {
@@ -240,7 +259,12 @@ export default function MovieForm({ onSubmit }) {
             name="releaseDate"
           />
 
-          <Submit value="Upload" onClick={handleSubmit} type="button" />
+          <Submit
+            busy={busy}
+            value="Upload"
+            onClick={handleSubmit}
+            type="button"
+          />
         </div>
         <div className="w-[30%] space-y-5">
           <PosterSelector

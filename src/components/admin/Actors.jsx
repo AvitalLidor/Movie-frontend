@@ -1,26 +1,131 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { BsPencilSquare, BsTrash } from "react-icons/bs";
+import { getActors } from "../../api/actor";
+import { useNotification } from "../../hooks/index";
+import NextAndPrevButton from "../NextAndPrevButton";
+
+let currentPageNo = 0;
+//items per page
+const limit = 4;
 
 export default function Actors() {
+  const [actors, setActors] = useState([]);
+  const [reachedToEnd, setReachedToEnd] = useState(false);
+
+  const { updateNotification } = useNotification();
+
+  const fetchActors = async (pageNo) => {
+    const { profiles, error } = await getActors(pageNo, limit);
+    if (error) return updateNotification("error", error);
+
+    if (!profiles.length) {
+      currentPageNo = pageNo - 1;
+      return setReachedToEnd(true);
+    }
+
+    setActors([...profiles]);
+  };
+
+  const handleOnNextClick = () => {
+    if (reachedToEnd) return;
+    currentPageNo += 1;
+    fetchActors(currentPageNo);
+  };
+
+  const handleOnPrevClick = () => {
+    if (currentPageNo <= 0) return;
+    currentPageNo -= 1;
+    fetchActors(currentPageNo);
+  };
+
+  useEffect(() => {
+    fetchActors(currentPageNo);
+  }, []);
+
   return (
-    <div className="grid grid-cols-4 gap-3 my-5">
-      <div className="bg-white shadow dark:shadow dark:bg-secondary h-20 overflow-hidden rounded">
-        <div className="flex cursor-pointer">
-          <img
-            src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8YWN0b3JzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=400&q=80"
-            alt=""
-            className="w-20 aspect-square object-cover"
-          />
-          <div className="px-2">
-            <h1 className="text-xl text-primary dark:text-white font-semibold">
-              John Doe
-            </h1>
-            <p className="text-primary dark:text-white">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Laudantium, fuga?
-            </p>
-          </div>
-        </div>
+    <div className="p-5">
+      <div className="grid grid-cols-4 gap-5 p-5">
+        {actors.map((actor) => {
+          return <ActorProfile profile={actor} key={actor.id} />;
+        })}
       </div>
+      <NextAndPrevButton
+        className="mt-5"
+        onNextClick={handleOnNextClick}
+        onPrevClick={handleOnPrevClick}
+      />
     </div>
   );
 }
+
+const ActorProfile = ({ profile }) => {
+  const [showOptions, setShowOptions] = useState(false);
+  const acceptedNameLength = 15;
+
+  const handleOnMouseEnter = () => {
+    setShowOptions(true);
+  };
+
+  const handleOnMouseLeave = () => {
+    setShowOptions(false);
+  };
+
+  const getName = (name) => {
+    if (name.length <= acceptedNameLength) return name;
+
+    return name.substring(0, acceptedNameLength) + "..";
+  };
+
+  const { name, about = "", avatar } = profile;
+
+  if (!profile) return null;
+
+  return (
+    <div className="bg-white shadow dark:shadow dark:bg-secondary rounded h-20 overflow-hidden">
+      <div
+        onMouseEnter={handleOnMouseEnter}
+        onMouseLeave={handleOnMouseLeave}
+        className="flex cursor-pointer relative"
+      >
+        <img
+          src={avatar}
+          alt={name}
+          className="w-20 aspect-square object-cover"
+        />
+
+        <div className="px-2">
+          <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
+            {getName(name)}
+          </h1>
+          <p className="text-primary dark:text-white">
+            {about.substring(0, 50)}
+          </p>
+        </div>
+        <Options visible={showOptions} />
+      </div>
+    </div>
+  );
+};
+
+const Options = ({ visible, onDeleteClick, onEditClick }) => {
+  if (!visible) return null;
+
+  return (
+    <div className="absolute inset-0 bg-primary bg-opacity-25 backdrop-blur-sm flex justify-center items-center space-x-5">
+      <button
+        onClick={onDeleteClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <BsTrash />
+      </button>
+      <button
+        onClick={onEditClick}
+        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        type="button"
+      >
+        <BsPencilSquare />
+      </button>
+    </div>
+  );
+};

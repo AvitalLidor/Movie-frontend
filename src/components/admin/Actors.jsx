@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BsPencilSquare, BsTrash } from "react-icons/bs";
-import { getActors } from "../../api/actor";
-import { useNotification } from "../../hooks/index";
+import { getActors, searchActor } from "../../api/actor";
+import { useNotification, useSearch } from "../../hooks/index";
+import SearchForm from "../form/SearchForm";
+import UpdateActor from "../models/UpdateActor";
 import NextAndPrevButton from "../NextAndPrevButton";
 
 let currentPageNo = 0;
@@ -10,9 +12,13 @@ const limit = 4;
 
 export default function Actors() {
   const [actors, setActors] = useState([]);
+  const [resluts, setResluts] = useState([]);
   const [reachedToEnd, setReachedToEnd] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
 
   const { updateNotification } = useNotification();
+  const { handleSearch } = useSearch();
 
   const fetchActors = async (pageNo) => {
     const { profiles, error } = await getActors(pageNo, limit);
@@ -34,8 +40,34 @@ export default function Actors() {
 
   const handleOnPrevClick = () => {
     if (currentPageNo <= 0) return;
+    if (reachedToEnd) setReachedToEnd(false);
+
     currentPageNo -= 1;
     fetchActors(currentPageNo);
+  };
+
+  const handleOnEditClick = (profile) => {
+    setShowUpdateModal(true);
+    setSelectedProfile(profile);
+  };
+
+  const hideUpdateModal = () => {
+    setShowUpdateModal(false);
+  };
+
+  const handleOnSearchSubmit = (value) => {
+    handleSearch(searchActor, value, setResluts);
+  };
+
+  const handleOnActorUpdate = (profile) => {
+    const updatedActors = actors.map((actor) => {
+      if (profile.id === actor.id) {
+        return profile;
+      }
+      return actor;
+    });
+
+    setActors([...updatedActors]);
   };
 
   useEffect(() => {
@@ -43,22 +75,51 @@ export default function Actors() {
   }, []);
 
   return (
-    <div className="p-5">
-      <div className="grid grid-cols-4 gap-5 p-5">
-        {actors.map((actor) => {
-          return <ActorProfile profile={actor} key={actor.id} />;
-        })}
+    <>
+      <div className="p-5">
+        <div className="flex justify-end mb-5">
+          <SearchForm
+            onSubmit={handleOnSearchSubmit}
+            placeholder="Search Actors..."
+          />
+        </div>
+        <div className="grid grid-cols-4 gap-5">
+          {resluts.length
+            ? resluts.map((actor) => (
+                <ActorProfile
+                  profile={actor}
+                  key={actor.id}
+                  onEditClick={() => handleOnEditClick(actor)}
+                />
+              ))
+            : actors.map((actor) => (
+                <ActorProfile
+                  profile={actor}
+                  key={actor.id}
+                  onEditClick={() => handleOnEditClick(actor)}
+                />
+              ))}
+        </div>
+        {!resluts.length ? (
+          <NextAndPrevButton
+            className="mt-5"
+            onNextClick={handleOnNextClick}
+            onPrevClick={handleOnPrevClick}
+          />
+        ) : null}
       </div>
-      <NextAndPrevButton
-        className="mt-5"
-        onNextClick={handleOnNextClick}
-        onPrevClick={handleOnPrevClick}
+
+      <UpdateActor
+        visible={showUpdateModal}
+        onClose={hideUpdateModal}
+        initialState={selectedProfile}
+        onSuccess={handleOnActorUpdate}
       />
-    </div>
+    </>
   );
 }
 
-const ActorProfile = ({ profile }) => {
+const ActorProfile = ({ profile, onEditClick }) => {
   const [showOptions, setShowOptions] = useState(false);
   const acceptedNameLength = 15;
 
@@ -97,11 +158,11 @@ const ActorProfile = ({ profile }) => {
           <h1 className="text-xl text-primary dark:text-white font-semibold whitespace-nowrap">
             {getName(name)}
           </h1>
-          <p className="text-primary dark:text-white">
+          <p className="text-primary dark:text-white opacity-70">
             {about.substring(0, 50)}
           </p>
         </div>
-        <Options visible={showOptions} />
+        <Options onEditClick={onEditClick} visible={showOptions} />
       </div>
     </div>
   );
@@ -114,14 +175,14 @@ const Options = ({ visible, onDeleteClick, onEditClick }) => {
     <div className="absolute inset-0 bg-primary bg-opacity-25 backdrop-blur-sm flex justify-center items-center space-x-5">
       <button
         onClick={onDeleteClick}
-        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        className="p-2 rounded-full bg-red-600 text-primary hover:opacity-80 transition"
         type="button"
       >
         <BsTrash />
       </button>
       <button
         onClick={onEditClick}
-        className="p-2 rounded-full bg-white text-primary hover:opacity-80 transition"
+        className="p-2 rounded-full bg-blue-600 text-primary hover:opacity-80 transition"
         type="button"
       >
         <BsPencilSquare />

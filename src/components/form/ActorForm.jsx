@@ -5,6 +5,7 @@ import { commonInputClasses } from "../../utils/theme";
 import PosterSelector from "../PosterSelector";
 import Selector from "../Selector";
 import { ImSpinner3 } from "react-icons/im";
+import { useEffect } from "react";
 
 const defaultActorInfo = {
   name: "",
@@ -29,7 +30,13 @@ const validateActor = ({ avatar, name, about, gender }) => {
   return { error: null };
 };
 
-export default function ActorForm({ title, btnTitle, busy, onSubmit }) {
+export default function ActorForm({
+  title,
+  btnTitle,
+  busy,
+  onSubmit,
+  initialState,
+}) {
   const [actorInfo, setActorInfo] = useState({ ...defaultActorInfo });
   const [selectedAvatarForUI, setselectedAvatarForUI] = useState("");
   const { updateNotification } = useNotification();
@@ -64,6 +71,13 @@ export default function ActorForm({ title, btnTitle, busy, onSubmit }) {
     }
     onSubmit(formData);
   };
+
+  useEffect(() => {
+    if (initialState) {
+      setActorInfo({ ...initialState, avatar: null });
+      setselectedAvatarForUI(initialState.avatar);
+    }
+  }, [initialState]);
 
   return (
     <form

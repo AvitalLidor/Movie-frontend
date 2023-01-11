@@ -81,3 +81,31 @@ export const getMovies = async (pageNo, limit) => {
     return catchError(error);
   }
 };
+
+export const deleteMovie = async (id) => {
+  const token = getToken();
+  try {
+    const { data } = await client.delete(`/movie/${id}`, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};
+
+export const searchMovieForAdmin = async (title) => {
+  const token = getToken();
+  try {
+    const { data } = await client(`/movie/search?title=${title}`, {
+      headers: {
+        authorization: "Bearer " + token,
+      },
+    });
+    return data;
+  } catch (error) {
+    return catchError(error);
+  }
+};

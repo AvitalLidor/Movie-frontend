@@ -78,7 +78,7 @@ export default function Movies() {
   //   fetchMovies(currentPageNo);
   // };
 
-  // const handleOnUpdate = (movie) => {
+  // const handleAfterUpdate = (movie) => {
   //   const updatedMovies = movies.map((m) => {
   //     if (m.id === movie.id) return movie;
   //     return m;
@@ -90,7 +90,7 @@ export default function Movies() {
   // const hideUpdateForm = () => setShowUpdateModal(false);
   // const hideConfirmModal = () => setShowConfirmModal(false);
 
-  const handleAfterDelete = () => fetchMovies();
+  const handleUIUpdate = () => fetchMovies();
 
   useEffect(() => {
     fetchMovies();
@@ -104,7 +104,8 @@ export default function Movies() {
             <MovieListItem
               key={movie.id}
               movie={movie}
-              afterDelete={handleAfterDelete}
+              afterDelete={handleUIUpdate}
+              afterUpdate={handleUIUpdate}
               // onEditClick={() => handleOnEditClick(movie)}
               // onDeleteClick={() => handleOnDeleteClick(movie)}
             />

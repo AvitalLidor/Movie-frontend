@@ -3,10 +3,13 @@ import { BsTrash, BsPencilSquare, BsBoxArrowUpRight } from "react-icons/bs";
 import { deleteMovie } from "../api/movie";
 import { useNotification } from "../hooks";
 import ConfirmModal from "./models/ConfirmModal";
+import UpdateMovie from "./models/UpdateMovie";
 
-const MovieListItem = ({ movie, afterDelete }) => {
+const MovieListItem = ({ movie, afterDelete, afterUpdate }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
 
   const { updateNotification } = useNotification();
 
@@ -15,11 +18,22 @@ const MovieListItem = ({ movie, afterDelete }) => {
     const { error, message } = await deleteMovie(movie.id);
     setBusy(false);
 
-    if (error) updateNotification("error", error);
+    if (error) return updateNotification("error", error);
 
+    hideConfirmModal();
     updateNotification("success", message);
     afterDelete(movie);
-    hideConfirmModal();
+  };
+
+  const handleOnEditClick = () => {
+    setShowUpdateModal(true);
+    setSelectedMovieId(movie.id);
+  };
+
+  const handleOnUpdate = (movie) => {
+    afterUpdate(movie);
+    setShowUpdateModal(false);
+    setSelectedMovieId(null);
   };
 
   const displayConfirmModal = () => setShowConfirmModal(true);
@@ -27,15 +41,24 @@ const MovieListItem = ({ movie, afterDelete }) => {
 
   return (
     <>
-      <MovieCard movie={movie} onDeleteClick={displayConfirmModal} />
+      <MovieCard
+        movie={movie}
+        onDeleteClick={displayConfirmModal}
+        onEditClick={handleOnEditClick}
+      />
       <div className="p-0">
         <ConfirmModal
           visible={showConfirmModal}
           onConfirm={handleOnDeleteConfirm}
           onCancel={hideConfirmModal}
           title="Are you sure?"
-          subtitle="This action will remove this movie!"
+          subtitle="This action will remove this movie permanently!"
           busy={busy}
+        />
+        <UpdateMovie
+          movieId={selectedMovieId}
+          visible={showUpdateModal}
+          onSuccess={handleOnUpdate}
         />
       </div>
     </>

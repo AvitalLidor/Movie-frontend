@@ -70,7 +70,7 @@ export default function LatestUploads() {
     fetchLatestUploads();
   }, []);
 
-  const handleAfterDelete = () => fetchLatestUploads();
+  const handleUIUpdate = () => fetchLatestUploads();
 
   return (
     <>
@@ -87,7 +87,8 @@ export default function LatestUploads() {
                 key={movie.id}
                 // onDeleteClick={() => handleOnDeleteClick(movie)}
                 // onEditClick={() => handleOnEditClick(movie)}
-                afterDelete={handleAfterDelete}
+                afterDelete={handleUIUpdate}
+                afterUpdate={handleUIUpdate}
               />
             );
           })}

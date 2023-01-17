@@ -9,6 +9,7 @@ import Home from "./components/Home";
 import NotFound from "./components/NotFound";
 
 import Navbar from "./components/user/Navbar";
+import SingleMovie from "./components/user/SingleMovie";
 import { useAuth } from "./hooks";
 import AdminNavigator from "./navigator/AdminNavigator";
 
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/auth/verification" element={<EmailVerification />} />
         <Route path="/auth/forget-password" element={<ForgetPassword />} />
         <Route path="/auth/reset-password" element={<ConfirmPassword />} />
+        <Route path="/movies/:movieId" element={<SingleMovie />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

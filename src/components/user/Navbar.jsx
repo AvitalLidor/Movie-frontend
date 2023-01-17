@@ -14,7 +14,7 @@ export default function Navbar() {
       <Container className="p-2">
         <div className="flex justify-between items-center">
           <Link to="/">
-            <img src="./logo.png" alt="" className="h-10" />
+            <img src="./logo.png" alt="" className="h-10 " />
           </Link>
           <ul className="flex items-center space-x-4">
             <li>

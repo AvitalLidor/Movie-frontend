@@ -21,5 +21,5 @@ export default function TopRatedMovies() {
     fetchMovies();
   }, []);
 
-  return <MovieList movies={movies} title="Viewrs choice (Movie)" />;
+  return <MovieList movies={movies} title="Viewers choice (Movie)" />;
 }

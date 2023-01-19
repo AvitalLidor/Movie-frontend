@@ -124,6 +124,7 @@ export default function HeroSlideShow() {
           src={currentSlide.poster}
           id={currentSlide.id}
         />
+
         {/* cloned slide */}
         <Slide
           ref={cloneSlideRef}

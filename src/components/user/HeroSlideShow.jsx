@@ -180,7 +180,7 @@ const Slide = forwardRef((props, ref) => {
   return (
     <Link
       ref={ref}
-      to={"/movie/" + id}
+      to={"/movies/" + id}
       className={"w-full cursor-pointer block " + className}
       {...rest}
     >
@@ -188,7 +188,7 @@ const Slide = forwardRef((props, ref) => {
         <img className="aspect-video object-cover" src={src} alt="" />
       ) : null}
       {title ? (
-        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white dark:from-primary">
+        <div className="absolute inset-0 flex flex-col justify-end py-3 bg-gradient-to-t from-white via-transparent dark:from-primary dark:via-transparent">
           <h1 className="font-semibold text-4xl dark:text-highlight-dark text-highlight">
             {title}
           </h1>

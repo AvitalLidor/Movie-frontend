@@ -7,6 +7,7 @@ import { useAuth, useNotification } from "../../hooks";
 import Container from "../Container";
 import CustomButtonLink from "../CustomButtonLink";
 import AddRatingModal from "../models/AddRatingModal";
+import ProfileModal from "../models/ProfileModal";
 import RatingStar from "../RatingStar";
 import RelatedMovies from "../RelatedMovies";
 
@@ -23,6 +24,8 @@ const convertDate = (date = "") => {
 
 export default function SingleMovie() {
   const [ready, setReady] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState({});
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [movie, setMovie] = useState({});
 
@@ -51,6 +54,15 @@ export default function SingleMovie() {
 
   const handleOnRatingSuccess = (reviews) => {
     setMovie({ ...movie, reviews: { ...reviews } });
+  };
+
+  const handleProfileClick = (profile) => {
+    setSelectedProfile(profile);
+    setShowProfileModal(true);
+  };
+
+  const hideProfileModal = () => {
+    setShowProfileModal(false);
   };
 
   useEffect(() => {
@@ -108,7 +120,10 @@ export default function SingleMovie() {
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
 
           <ListWithLabel label="Director:">
-            <CustomButtonLink label={director.name} />
+            <CustomButtonLink
+              label={director.name}
+              onClick={() => handleProfileClick(director)}
+            />
           </ListWithLabel>
 
           <ListWithLabel label="Writers:">
@@ -150,6 +165,11 @@ export default function SingleMovie() {
           <RelatedMovies movieId={movieId} />
         </div>
       </Container>
+      <ProfileModal
+        visible={showProfileModal}
+        onClose={hideProfileModal}
+        profileId={selectedProfile.id}
+      />
 
       <AddRatingModal
         visible={showRatingModal}

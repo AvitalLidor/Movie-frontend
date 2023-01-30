@@ -17,7 +17,6 @@ import Label from "../Label";
 import LabelWithBadge from "../LabelWithBadge";
 import CastModal from "../models/CastModal";
 import GenresModal from "../models/GenresModal";
-// import ModalContainer from "../modals/ModalContainer";
 import WritersModal from "../models/WritersModal";
 import PosterSelector from "../PosterSelector";
 import Selector from "../Selector";
@@ -65,12 +64,6 @@ export default function MovieForm({ onSubmit, btnTitle, initialState, busy }) {
 
     finalMovieInfo.tags = JSON.stringify(tags);
     finalMovieInfo.genres = JSON.stringify(genres);
-
-    //    {
-    //   actor: { type: mongoose.Schema.Types.ObjectId, ref: "Actor" },
-    //   roleAs: String,
-    //   leadActor: Boolean,
-    // },
 
     const finalCast = cast.map((c) => ({
       actor: c.profile.id,

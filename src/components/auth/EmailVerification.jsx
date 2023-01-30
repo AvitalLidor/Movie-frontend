@@ -105,8 +105,6 @@ export default function EmailVerification() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoggedIn, isVerified]);
 
-  // // if(!user) return null
-
   return (
     <FormContainer>
       <Container>

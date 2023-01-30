@@ -26,7 +26,7 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
     <div className="flex items-center justify-between relative p-5">
       <SearchForm
         onSubmit={handleSearchSubmit}
-        placeholder="Search Movies..."
+        placeholder=" Search Movies..."
       />
 
       <div className="flex items-center space-x-3">

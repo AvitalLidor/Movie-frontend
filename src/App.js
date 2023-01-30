@@ -7,6 +7,7 @@ import Signin from "./components/auth/Signin";
 import Signup from "./components/auth/Signup";
 import Home from "./components/Home";
 import NotFound from "./components/NotFound";
+import Footer from "./components/user/Footer";
 import MovieReviews from "./components/user/MovieReviews";
 import Navbar from "./components/user/Navbar";
 import SearchMovies from "./components/user/SearchMovies";
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/movie/search/" element={<SearchMovies />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </>
   );
 }

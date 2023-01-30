@@ -67,8 +67,6 @@ export default function AuthProvider({ children }) {
     isAuth();
   }, []);
 
-  //   handleLogout,
-
   return (
     <AuthContext.Provider
       value={{ authInfo, handleLogin, isAuth, handleLogout }}

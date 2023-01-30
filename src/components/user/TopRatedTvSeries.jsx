@@ -25,5 +25,5 @@ export default function TopRatedTVSeries() {
     };
   }, []);
 
-  return <MovieList movies={movies} title="Viewrs choice (TV Series)" />;
+  return <MovieList movies={movies} title="Viewres choice (TV Series)" />;
 }

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth, useNotification } from "../../hooks";
 import { isValidEmail } from "../../utils/helper";
@@ -46,11 +45,6 @@ export default function Signin() {
 
     handleLogin(userInfo.email, userInfo.password);
   };
-
-  // useEffect(() => {
-  //   //we want to move our user to somewhere else
-  //   if (isLoggedIn) navigate("/");
-  // }, [isLoggedIn]);
 
   return (
     <FormContainer>

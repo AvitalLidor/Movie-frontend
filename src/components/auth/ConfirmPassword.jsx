@@ -25,8 +25,6 @@ export default function ConfirmPassword() {
   const { updateNotification } = useNotification();
   const navigate = useNavigate();
 
-  //isValid  ,!isValid
-
   useEffect(() => {
     isValidToken();
   }, []);

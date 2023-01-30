@@ -89,14 +89,14 @@ export default function SingleMovie() {
   } = movie;
 
   return (
-    <div className="dark:bg-primary bg-white min-h-screen pb-10">
+    <div className="dark:bg-primary bg-white min-h-screen pb-10 ">
       <Container className="xl:px-0 px-2">
         <video poster={poster} controls src={trailer}></video>
         <div className="flex justify-between">
           <h1 className="xl:text-4xl lg:text-3xl text-2xl  text-highlight dark:text-highlight-dark font-semibold py-3">
             {title}
           </h1>
-          <div className="flex flex-col items-end">
+          <div className="flex flex-col items-end ">
             <RatingStar rating={reviews.ratingAvg} />
             <CustomButtonLink
               label={convertReviewCount(reviews.reviewCount) + " Reviews"}
@@ -110,7 +110,7 @@ export default function SingleMovie() {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 ">
           <p className="text-light-subtle dark:text-dark-subtle">{storyLine}</p>
 
           <ListWithLabel label="Director:">
@@ -156,7 +156,9 @@ export default function SingleMovie() {
           </ListWithLabel>
 
           <CastProfiles cast={cast} />
-          <RelatedMovies movieId={movieId} />
+          <div className="py-8">
+            <RelatedMovies movieId={movieId} />
+          </div>
         </div>
       </Container>
       <ProfileModal
@@ -188,7 +190,7 @@ const ListWithLabel = ({ children, label }) => {
 const CastProfiles = ({ cast }) => {
   return (
     <div className="">
-      <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2">
+      <h1 className="text-light-subtle dark:text-dark-subtle font-semibold text-2xl mb-2 ">
         Cast:
       </h1>
       <div className="flex flex-wrap space-x-4 ">

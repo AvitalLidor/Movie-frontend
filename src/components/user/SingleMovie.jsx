@@ -63,6 +63,10 @@ export default function SingleMovie() {
     if (movieId) fetchMovie();
   }, [movieId]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
   if (!ready)
     return (
       <div className="h-screen flex justify-center items-center dark:bg-primary bg-white">
@@ -122,14 +126,22 @@ export default function SingleMovie() {
 
           <ListWithLabel label="Writers:">
             {writers.map((w) => (
-              <CustomButtonLink label={w.name} key={w.id} />
+              <CustomButtonLink
+                onClick={() => handleProfileClick(w)}
+                key={w.id}
+                label={w.name}
+              />
             ))}
           </ListWithLabel>
 
           <ListWithLabel label="Cast:">
             {cast.map(({ id, profile, leadActor }) => {
               return leadActor ? (
-                <CustomButtonLink label={profile.name} key={id} />
+                <CustomButtonLink
+                  onClick={() => handleProfileClick(profile)}
+                  label={profile.name}
+                  key={id}
+                />
               ) : null;
             })}
           </ListWithLabel>

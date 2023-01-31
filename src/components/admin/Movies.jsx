@@ -20,7 +20,7 @@ export default function Movies() {
 
   return (
     <>
-      <div className="space-y-3 p-5">
+      <div className="space-y-3 p-5 dark:bg-primary">
         {newMovies.map((movie) => {
           return (
             <MovieListItem
@@ -32,7 +32,7 @@ export default function Movies() {
           );
         })}
         <NextAndPrevButton
-          className="mt-5"
+          className="mt-5 dark:bg-primary"
           onNextClick={fetchNextPage}
           onPrevClick={fetchPrevPage}
         />

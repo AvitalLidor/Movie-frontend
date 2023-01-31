@@ -15,8 +15,8 @@ export default function Footer() {
                 className="text-5xl text-white fa-beat"
               />
             </a>
-            <p className="text-white xl:text-xl">
-              This site created by Lidor Avital &copy; 2023
+            <p className="text-white xl:text-xl text-center">
+              This site created by Lidor Avital &copy;2023
             </p>
             <a href="https://github.com/AvitalLidor">
               <FontAwesomeIcon

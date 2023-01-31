@@ -18,6 +18,7 @@ const validateUserInfo = ({ name, email, password }) => {
   //eslint-disable-next-line
 
   const isValidName = /^[a-z A-Z]+$/;
+  // const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*() ]).{8,}$/gm; REGEX
 
   if (!name.trim()) return { ok: false, error: "Name is missing!" };
   if (!isValidName.test(name)) return { ok: false, error: "Invalid Name" };

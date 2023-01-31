@@ -102,7 +102,7 @@ export default function Actors() {
 
   return (
     <>
-      <div className="p-5">
+      <div className="p-5 dark:bg-primary ">
         <div className="flex justify-end mb-5">
           <SearchForm
             onReset={handleSerachReset}
@@ -113,7 +113,7 @@ export default function Actors() {
         </div>
         <NotFoundText text="Record Not Found" visible={resultNotFound} />
 
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-5 ">
           {results.length || resultNotFound
             ? results.map((actor) => (
                 <ActorProfile

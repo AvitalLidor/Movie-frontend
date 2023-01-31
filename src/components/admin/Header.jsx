@@ -23,7 +23,7 @@ export default function Header({ onAddMovieClick, onAddActorClick }) {
   };
 
   return (
-    <div className="flex items-center justify-between relative p-5">
+    <div className="flex dark:bg-secondary items-center justify-between relative p-5 ">
       <SearchForm
         onSubmit={handleSearchSubmit}
         placeholder=" Search Movies..."

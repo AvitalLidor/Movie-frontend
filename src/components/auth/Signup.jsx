@@ -18,7 +18,8 @@ const validateUserInfo = ({ name, email, password }) => {
   //eslint-disable-next-line
 
   const isValidName = /^[a-z A-Z]+$/;
-  // const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*() ]).{8,}$/gm; REGEX
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d.*\d.*\d.*\d)(?=.*[!@#$%^&?,.]).{7,}$/;
 
   if (!name.trim()) return { ok: false, error: "Name is missing!" };
   if (!isValidName.test(name)) return { ok: false, error: "Invalid Name" };
@@ -27,8 +28,14 @@ const validateUserInfo = ({ name, email, password }) => {
   if (!isValidEmail(email)) return { ok: false, error: "Invalid email" };
 
   if (!password.trim()) return { ok: false, error: "Password is missing" };
-  if (password.length < 8)
-    return { ok: false, error: "Password must be 8 characters long" };
+  if (!passwordRegex.test(password))
+    return {
+      ok: false,
+      error:
+        "Password must contain at least 8 characters, including a lowercase letter, an uppercase letter, a number, and a special character.",
+    };
+  // if (password.length < 8)
+  //   return { ok: false, error: "Password must be 8 characters long" };
 
   return { ok: true };
 };
